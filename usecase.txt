@@ -1,6 +1,3 @@
-# Autism-Prediction
-Autism Prediction in Adults #Autism #kaggle
-
 Abstract
 
 Improve Autism Screening by creating predicting the likelihood of having this condition.
