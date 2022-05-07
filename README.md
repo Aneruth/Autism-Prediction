@@ -38,7 +38,7 @@ Columns
 
 ID - ID of the patient
 
-A1_Score to A10_Score - Score based on Autism Spectrum Quotient (AQ) 10 item screening tool *improtant*
+A1_Score to A10_Score - Score based on Autism Spectrum Quotient (AQ) 10 item screening tool *_improtant_*
 
 age - Age of the patient in years
 

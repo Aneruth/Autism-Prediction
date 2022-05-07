@@ -1,27 +1,27 @@
 {
-    "id": "855375AD",
+    "id": "C63CD196",
     "path": "~/Documents/GitHub/Autism-Prediction/DataClean.R",
     "project_path": "DataClean.R",
     "type": "r_source",
     "hash": "0",
     "contents": "",
     "dirty": false,
-    "created": 1651844891780.0,
+    "created": 1651855889529.0,
     "source_on_save": false,
     "relative_order": 1,
     "properties": {
         "tempName": "Untitled1",
         "source_window_id": "",
         "Source": "Source",
-        "cursorPosition": "21,0",
-        "scrollLine": "0"
+        "cursorPosition": "38,15",
+        "scrollLine": "32"
     },
     "folds": "",
-    "lastKnownWriteTime": 1651845583,
+    "lastKnownWriteTime": 1651946184,
     "encoding": "UTF-8",
     "collab_server": "",
     "source_window": "",
-    "last_content_update": 1651845583268,
+    "last_content_update": 1651946184112,
     "read_only": false,
     "read_only_alternatives": []
 }
