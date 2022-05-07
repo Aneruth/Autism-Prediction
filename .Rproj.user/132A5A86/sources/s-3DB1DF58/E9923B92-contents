@@ -1,0 +1,12 @@
+set.seed(123)
+
+train_data <- read.csv('~/Documents/GitHub/Autism-Prediction/Data/train_df.csv')
+test_data <- read.csv('~/Documents/GitHub/Autism-Prediction/Data/test_df.csv')
+
+library(randomForest)
+
+model = randomForest(Class.ASD~.,data = train_data,ntree=100, mtry = 5)
+
+predict <- predict(model, newdata = test_data)
+
+table(predict, train_data$Class.ASD)
