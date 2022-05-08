@@ -1,5 +1,6 @@
 test <- read.csv('~/Documents/GitHub/Autism-Prediction/Data/test.csv')
 train <- read.csv('~/Documents/GitHub/Autism-Prediction/Data/train.csv')
+train$Class.ASD <- as.factor(train$Class.ASD)
 
 train_dim <- dim(train) # Dimensions of the train dataset
 print(train_dim)
@@ -39,9 +40,6 @@ labels_rename <- function(dataset){
   # Factorizing the jaundice label where yes is 0 and no is 1
   dataset$jaundice <- ifelse(dataset$jaundice == "yes",as.numeric(0),dataset$jaundice)
   dataset$jaundice <- ifelse(dataset$jaundice == "no",as.numeric(1),dataset$jaundice)
-  
-  # Consiering the label class as factors
-  dataset$Class.ASD <- as.factor(dataset$Class.ASD)
   
   return(dataset)
 }
