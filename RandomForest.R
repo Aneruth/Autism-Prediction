@@ -40,6 +40,9 @@ labels_rename <- function(dataset){
   dataset$jaundice <- ifelse(dataset$jaundice == "yes",as.numeric(0),dataset$jaundice)
   dataset$jaundice <- ifelse(dataset$jaundice == "no",as.numeric(1),dataset$jaundice)
   
+  # Consiering the label class as factors
+  dataset$Class.ASD <- as.factor(dataset$Class.ASD)
+  
   return(dataset)
 }
 
@@ -49,38 +52,57 @@ test_df <- labels_rename(test_df)
 write.csv(train_df,"~/Documents/GitHub/Autism-Prediction/Data/train_df.csv", row.names = FALSE)
 write.csv(test_df,"~/Documents/GitHub/Autism-Prediction/Data/test_df.csv", row.names = FALSE)
 
+# Splitting the dataset into train test with 80:20 ratio
 dt = sort(sample(nrow(train_df), nrow(train_df)*.8))
 data_train<-train_df[dt,]
 data_test<-train_df[-dt,]
 
-library(randomForest)
-rfm = randomForest(Class.ASD~.,data = data_train,ntree=100)
-
-Y_pred <- predict(rfm,data_test[,-ncol(data_test)])
-Y <- data_test[,ncol(data_test)]
-
-# Building the confusion matrix
-confusion_matrix <- table(Y_pred,Y)
-confusion_matrix
-
-accuracy_randomForest = sum(diag(confusion_matrix)/sum(confusion_matrix))
-paste0('Accuracy Score for random forest using train test split : ',round(accuracy_randomForest*100),'%')
-
-accuracy_vec <- array(0,15)
-for (i in 1:15){ 
-  model <- randomForest(x=data_train[,-15],
-                        y=as.factor(data_train[,15]),
-                        xtest=data_test[,-15],
-                        ytest=as.factor(data_test[,15]),
-                        ntree=i) 
-  accuracy_vec[i] = (model$test$confusion[1,1]+model$test$confusion[2,2])/sum(model$test$confusion)
+randomForest <- function(){
+  
+  # Package for random forest
+  library(randomForest)
+  
+  rfm = randomForest(Class.ASD~.,data = data_train,ntree=100,proximity = TRUE)
+  
+  Y_pred <- predict(rfm,data_test[,-ncol(data_test)])
+  Y <- data_test[,ncol(data_test)]
+  
+  # Building the confusion matrix
+  confusion_matrix <- table(Y_pred,Y)
+  confusion_matrix
+  
+  accuracy_randomForest = sum(diag(confusion_matrix)/sum(confusion_matrix))
+  paste0('Accuracy Score for random forest using train test split : ',round(accuracy_randomForest*100),'%')
+  
+  # Hyper parameter tuning for random forest
+  accuracy_vec <- array(0,15)
+  for (i in 1:15){ 
+    model <- randomForest(x=data_train[,-15],
+                          y=as.factor(data_train[,15]),
+                          xtest=data_test[,-15],
+                          ytest=as.factor(data_test[,15]),
+                          ntree=i, 
+                          importance = TRUE,
+                          proximity = TRUE) 
+    accuracy_vec[i] = (model$test$confusion[1,1]+model$test$confusion[2,2])/sum(model$test$confusion)
+  }
+  
+  return(accuracy_vec) # Hyper parameter tuned scores in a vector
 }
-accuracy_vec
 
+accuracy_vec <- randomForest()
 
-rfmm = randomForest(Class.ASD~.,data = data_train,ntree=which.max(accuracy_vec))
+# Considering the best hyper parameter index value
+rfmm = randomForest(Class.ASD~.,data = data_train,ntree=which.max(accuracy_vec), 
+                    importance = TRUE,
+                    proximity = TRUE)
 pred <- predict(rfmm,test_df)
 df <- data.frame(pred)
 
-final_sub <- cbind(test$ID,df$pred)
-write.csv(final_sub,"~/Documents/GitHub/Autism-Prediction/Data/final_sub.csv", row.names = FALSE)
+final_sub <- data.frame(test$ID,df$pred)
+
+# Renaming the columns
+names(final_sub)[1] <- "ID"
+names(final_sub)[2] <- "Class/ASD"
+
+write.csv(final_sub,"~/Documents/GitHub/Autism-Prediction/Data/final_sub_2.csv", row.names = FALSE)
