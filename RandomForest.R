@@ -1,5 +1,5 @@
 test <- read.csv('~/Documents/GitHub/Autism-Prediction/Data/test.csv')
-train <- read.csv('~/Documents/GitHub/Autism-Prediction/Data/train.csv')
+train <- read.csv('/Users/aneruthmohanasundaram/Desktop/train_data.csv')
 train$Class.ASD <- as.factor(train$Class.ASD)
 
 train_dim <- dim(train) # Dimensions of the train dataset
